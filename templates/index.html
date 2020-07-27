@@ -1,0 +1,37 @@
+<html>
+<head>
+  <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
+  <script>
+    var  socket,
+        remoteCapture;
+    
+    function initialize(){
+      let endPoint = "http://localhost:5000";
+      socket = io.connect(`${endPoint}`);
+
+      remoteCapture = document.getElementById('remote-capture');
+
+      socket.on('capture-send', function(data){
+        remoteCapture.setAttribute('src', data.dataURL);
+      });
+      socket.emit("start");
+
+    }
+
+    window.addEventListener('load', initialize);
+
+  </script>
+</head>
+    <body>
+      <img 
+        src="{{ url_for('video_feed') }}"
+        width="400"
+        height="300"
+      >
+      <img 
+        id="remote-capture"
+        width="400"
+        height="300"
+      >
+    </body>
+</html>
